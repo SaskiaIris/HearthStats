@@ -92,9 +92,9 @@ int main() {
 void playGame() {
 	for (int i = 1; i < fps; i++) {
 		varChangeByStateRobber();
-		varChangeByStateCop();
-		checkMax(); //Check whether the variables haven't exceeded their maximum and minimum values
 	}
+	varChangeByStateCop();
+	checkMax(); //Check whether the variables haven't exceeded their maximum and minimum values
 
 	sleep_until(system_clock::now() + 2.5s);
 
