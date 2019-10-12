@@ -82,9 +82,7 @@ int main() {
 		cout << "Cop while " << stateCopMessage() << endl << endl << endl << endl;
 
 		cout << "-----------------------------------------------------------------" << endl << endl << endl;
-		/*currentRobberState = stateRobberManager(currentRobberState, wealth, strength, distanceCop);
-		cout << actionRobberPerformingText << endl;
-		cout << stateRobberMessage() << endl << endl << endl;*/
+
 		playGame();
 	}
 
@@ -112,13 +110,10 @@ void playGame() {
 
 	cout << "-----------------------------------------------------------------" << endl << endl << endl;
 
-	if (
-		//cin.get() == 'exit'
-		currentRobberState == BeingInJail && dutyTime < 1) {
+	if (currentRobberState == BeingInJail && dutyTime < 1) {
 		return;
 	}
 	else {
-		//cout << "What's next? (type exit to quit the game)" << endl;
 		playGame();
 	}
 }
@@ -369,11 +364,11 @@ void varChangeByStateCop() {
 
 			break;
 		case OnStakeOut:
-			dutyTime = rand() % 1 + dutyTime;
+			dutyTime += rand() % 1;
 
 			break;
 		case Chasing:
-			dutyTime = rand() % 1 + dutyTime;
+			dutyTime += rand() % 1;
 			distanceCop--;
 
 			break;
@@ -397,9 +392,17 @@ CopState stateCopManager(CopState beforeState, int currentDutyTime) {
 		}
 		break;
 	case OnStakeOut:
-		if (distanceCop < 5) {
+		if (dutyTime > 9) {
+			outputState = OffDuty;
+			actionCopPerformingText = "\"Duty time\'s over, I\'m headed home\"";
+		}
+		else if (distanceCop < 5) {
 			outputState = Chasing;
 			actionCopPerformingText = "\"There he is! The thief, I found him!\"";
+		}
+		else if(distanceCop >= 5) {
+			outputState = beforeState;
+			actionCopPerformingText = "\"Let\'s keep working\"";
 		}
 		else {
 			outputState = beforeState;
@@ -414,6 +417,10 @@ CopState stateCopManager(CopState beforeState, int currentDutyTime) {
 		else if (dutyTime > 9 && currentRobberState == BeingInJail) {
 			outputState = OffDuty;
 			actionCopPerformingText = "\"Justice served, he\'s behind bars\"";
+		}
+		else if (dutyTime < 10) {
+			outputState = beforeState;
+			actionCopPerformingText = "\"Let\'s keep chasing him\"";
 		}
 		else {
 			outputState = beforeState;
