@@ -1,4 +1,3 @@
 ﻿  HearthStats.cpp
-D:\Gebruikers\Iris Oostra\Documenten\GitHub\hearthstats\HearthStats\HearthStats.cpp(47,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-D:\Gebruikers\Iris Oostra\Documenten\GitHub\hearthstats\HearthStats\HearthStats.cpp(83): warning C4717:  'playGame': recursive on all control paths, function will cause runtime stack overflow
+D:\Gebruikers\Iris Oostra\Documenten\GitHub\hearthstats\HearthStats\HearthStats.cpp(64,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   HearthStats.vcxproj -> D:\Gebruikers\Iris Oostra\Documenten\GitHub\hearthstats\HearthStats\Debug\HearthStats.exe

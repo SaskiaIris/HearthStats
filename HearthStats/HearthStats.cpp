@@ -66,11 +66,25 @@ int main() {
 	cout << "Press enter to begin." << endl;
 	if (cin.get() == '\n') {
 		varChangeByStateRobber();
+		varChangeByStateCop();
 		checkMax();
 
+		sleep_until(system_clock::now() + 2.5s);
+
 		currentRobberState = stateRobberManager(currentRobberState, wealth, strength, distanceCop);
+		cout << "Wealth: " << wealth << endl << "Strength: " << strength << endl << "Distance to cop: " << distanceCop << endl << endl;
+		cout << "Robber: " << actionRobberPerformingText << endl << endl;
+		cout << "Robber while " << stateRobberMessage() << endl << endl << endl << endl;
+
+		currentCopState = stateCopManager(currentCopState, dutyTime);
+		cout << "Duty time: " << dutyTime << endl << endl;
+		cout << "Cop: " << actionCopPerformingText << endl << endl;
+		cout << "Cop while " << stateCopMessage() << endl << endl << endl << endl;
+
+		cout << "-----------------------------------------------------------------" << endl << endl << endl;
+		/*currentRobberState = stateRobberManager(currentRobberState, wealth, strength, distanceCop);
 		cout << actionRobberPerformingText << endl;
-		cout << stateRobberMessage() << endl << endl << endl;
+		cout << stateRobberMessage() << endl << endl << endl;*/
 		playGame();
 	}
 
@@ -80,6 +94,7 @@ int main() {
 void playGame() {
 	for (int i = 1; i < fps; i++) {
 		varChangeByStateRobber();
+		varChangeByStateCop();
 		checkMax(); //Check whether the variables haven't exceeded their maximum and minimum values
 	}
 
@@ -87,10 +102,19 @@ void playGame() {
 
 	currentRobberState = stateRobberManager(currentRobberState, wealth, strength, distanceCop);
 	cout << "Wealth: " << wealth << endl << "Strength: " << strength << endl << "Distance to cop: " << distanceCop << endl << endl;
-	cout << actionRobberPerformingText << endl << endl;
-	cout << stateRobberMessage() << endl << endl << endl << endl;
+	cout << "Robber: " << actionRobberPerformingText << endl << endl;
+	cout << "Robber while " << stateRobberMessage() << endl << endl << endl << endl;
 
-	if (cin.get() == 'exit') {
+	currentCopState = stateCopManager(currentCopState, dutyTime);
+	cout << "Duty time: " << dutyTime << endl << endl;
+	cout << "Cop: " << actionCopPerformingText << endl << endl;
+	cout << "Cop while " << stateCopMessage() << endl << endl << endl << endl;
+
+	cout << "-----------------------------------------------------------------" << endl << endl << endl;
+
+	if (
+		//cin.get() == 'exit'
+		currentRobberState == BeingInJail && dutyTime < 1) {
 		return;
 	}
 	else {
@@ -310,25 +334,25 @@ string stateRobberMessage() {
 
 	switch (currentRobberState) {
 		case RobbingBank:
-			outputStateMessage = "\"'I\'m robbing banks and getting loads of money! Pew pew!\"";
+			outputStateMessage = "robbing a bank: \"'I\'m robbing banks and getting loads of money! Pew pew!\"";
 			break;
 		case HavingGoodTime:
-			outputStateMessage = "\"I\'m having a good time spending my money\"";
+			outputStateMessage = "having a good time: \"I\'m having a good time spending my money\"";
 			break;
 		case LayingLow:
-			outputStateMessage = "\"I\'ll just wait a minute..\"";
+			outputStateMessage = "laying low: \"I\'ll just wait a minute..\"";
 			break;
 		case Fleeing:
-			outputStateMessage = "\"Who said being a thief isn\'t a sport? I\'m running all day!\"";
+			outputStateMessage = "fleeing: \"Who said being a thief isn\'t a sport? I\'m running all day!\"";
 			break;
 		case BeingInJail:
-			outputStateMessage = "\"So when can I go home? Jail is stupid.\"";
+			outputStateMessage = "being in jail: \"So when can I go home? Jail is stupid.\"";
 			break;
 		case BeingTipsy:
-			outputStateMessage = "\"Glug..glug.... hmmmm..... beeeer\"";
+			outputStateMessage = "being tipsy: \"Glug..glug.... hmmmm..... beeeer\"";
 			break;
 		default:
-			outputStateMessage = "\"I am so confused\" + ERROR CHECK DEFAULTMESSAGEROBBER";
+			outputStateMessage = "being confused: \"I am so confused\" + ERROR CHECK DEFAULTMESSAGEROBBER";
 	}
 
 	return outputStateMessage;
@@ -345,11 +369,11 @@ void varChangeByStateCop() {
 
 			break;
 		case OnStakeOut:
-			dutyTime += rand() % 2;
+			dutyTime = rand() % 1 + dutyTime;
 
 			break;
 		case Chasing:
-			dutyTime += rand() % 2;
+			dutyTime = rand() % 1 + dutyTime;
 			distanceCop--;
 
 			break;
@@ -365,50 +389,50 @@ CopState stateCopManager(CopState beforeState, int currentDutyTime) {
 	case StartGameCop:
 		if (dutyTime < 1) {
 			outputState = OnStakeOut;
-			actionCopPerformingText = "\"Let\'s start this\"";
+			actionCopPerformingText = "\"Time to go to work!\"";
 		}
 		else {
 			outputState = beforeState;
-			actionCopPerformingText = "\"I\'m so confused\" + ERROR CHECK STARTGAME";
+			actionCopPerformingText = "\"I need a donut..\" + ERROR CHECK STARTGAMECOP";
 		}
 		break;
 	case OnStakeOut:
 		if (distanceCop < 5) {
 			outputState = Chasing;
-			actionCopPerformingText = "\"I\'m rich enough to have a good time\"";
+			actionCopPerformingText = "\"There he is! The thief, I found him!\"";
 		}
 		else {
 			outputState = beforeState;
-			actionCopPerformingText = "\"Let\'s try again\" + ERROR CHECK ROBBINGBANK";
+			actionCopPerformingText = "\"I need a donut..\" + ERROR CHECK ONSTAKEOUT";
 		}
 		break;
 	case Chasing:
 		if (dutyTime > 9 && currentRobberState != BeingInJail) {
 			outputState = OffDuty;
-			actionCopPerformingText = "\"I\'m getting very tired, so I better lay low for a while\"";
+			actionCopPerformingText = "\"Duty time\'s over, I\'m headed home\"";
 		}
 		else if (dutyTime > 9 && currentRobberState == BeingInJail) {
 			outputState = OffDuty;
-			actionCopPerformingText = "\"I\'m getting very tired, so I better lay low for a while\"";
+			actionCopPerformingText = "\"Justice served, he\'s behind bars\"";
 		}
 		else {
 			outputState = beforeState;
-			actionCopPerformingText = "\"Let\'s try again\" + ERRO CHECK HAVINGGOODTIME";
+			actionCopPerformingText = "\"I need a donut..\" + ERRO CHECK CHASING";
 		}
 		break;
 	case OffDuty:
-		if (dutyTime = 0) {
+		if (dutyTime < 1) {
 			outputState = OnStakeOut;
-			actionCopPerformingText = "\"I\'m getting very tired, so I better lay low for a while\"";
+			actionCopPerformingText = "\"Time to go to work!\"";
 		}
 		else {
 			outputState = beforeState;
-			actionCopPerformingText = "\"Let\'s try again\" + ERRO CHECK HAVINGGOODTIME";
+			actionCopPerformingText = "\"I need a donut..\" + ERRO CHECK OFFDUTY";
 		}
 		break;
 	default:
 		outputState = StartGameCop;
-		actionCopPerformingText = "\"Let\'s start over\" + ERROR CHECK DEFAULTSTATE";
+		actionCopPerformingText = "\"Let\'s start over and find the thief\" + ERROR CHECK DEFAULTSTATECOP";
 	}
 
 	return outputState;
@@ -419,16 +443,16 @@ string stateCopMessage() {
 
 	switch (currentCopState) {
 		case OffDuty:
-			outputStateMessage = "\"'I\'m robbing banks and getting loads of money! Pew pew!\"";
+			outputStateMessage = "being off duty: \"'Relaxing on the sofa, watching Crime Scene Investigation\"";
 			break;
 		case OnStakeOut:
-			outputStateMessage = "\"I\'m having a good time spending my money\"";
+			outputStateMessage = "on stake out: \"On the hunt for crime\"";
 			break;
 		case Chasing:
-			outputStateMessage = "\"Hold it right there buddy\"";
+			outputStateMessage = "chasing: \"Hold it right there buddy\"";
 			break;
 		default:
-			outputStateMessage = "\"I need a donut\" + ERROR CHECK DEFAULTMESSAGECOP";
+			outputStateMessage = "being confused: \"I need a donut!!!\" + ERROR CHECK DEFAULTMESSAGECOP";
 	}
 
 	return outputStateMessage;
