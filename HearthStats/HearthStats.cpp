@@ -158,7 +158,7 @@ State stateManager(State beforeState, int currentWealth, int currentStrength, in
 
 	switch (beforeState) {
 		case StartGame:
-			if (wealth == 0 && strength == 100) {
+			if (currentWealth == 0 && currentStrength == 100) {
 				outputState = RobbingBank;
 				actionPerformingText = "\"Let\'s start this\"";
 			}
@@ -168,17 +168,17 @@ State stateManager(State beforeState, int currentWealth, int currentStrength, in
 			}
 			break;
 		case RobbingBank:
-			if (wealth >= 60 && distanceCop > 5) {
+			if (currentWealth >= 60 && currentDistanceCop > 5) {
 				//GetRich
 				outputState = HavingGoodTime;
 				actionPerformingText = "\"I\'m rich enough to have a good time\"";
 			}
-			else if (distanceCop > 0 && distanceCop <= 5) {
+			else if (currentDistanceCop > 0 && currentDistanceCop <= 5) {
 				//SpotCop
 				outputState = Fleeing;
 				actionPerformingText = "\"I see a cop, so I have to start running\"";
 			}
-			else if (distanceCop == 0) {
+			else if (currentDistanceCop == 0) {
 				//GetCaught
 				outputState = BeingInJail;
 				actionPerformingText = "\"Oh no, the cops are bringing me to my new home!\"";
@@ -189,17 +189,17 @@ State stateManager(State beforeState, int currentWealth, int currentStrength, in
 			}
 			break;
 		case HavingGoodTime:
-			if (wealth >= 40 && wealth <= 70 && strength < 40) {
+			if (currentWealth >= 40 && currentWealth <= 70 && currentStrength < 40) {
 				//GetTired
 				outputState = LayingLow;
 				actionPerformingText = "\"I\'m getting very tired, so I better lay low for a while\"";
 			}
-			else if (distanceCop == 0) {
+			else if (currentDistanceCop == 0) {
 				//SpotCop
 				outputState = Fleeing;
 				actionPerformingText = "\"I see a cop, so I have to start running\"";
 			}
-			else if (strength < 40) {
+			else if (currentStrength < 40) {
 				//GoToBar
 				outputState = BeingTipsy;
 				actionPerformingText = "\"All drinks on me!\"";
@@ -210,12 +210,12 @@ State stateManager(State beforeState, int currentWealth, int currentStrength, in
 			}
 			break;
 		case LayingLow:
-			if (strength >= 65 && distanceCop >= 7) {
+			if (currentStrength >= 65 && currentDistanceCop >= 7) {
 				//FeelSafe
 				outputState = RobbingBank;
 				actionPerformingText = "\"Let\'s get back to what I was doing\"";
 			}
-			else if (strength < 65 && wealth >= 40 && wealth <= 70) {
+			else if (currentStrength < 65 && currentWealth >= 40 && currentWealth <= 70) {
 				//GetBored
 				outputState = BeingTipsy;
 				actionPerformingText = "\"A bar is a good safe spot, right? Right??\"";
@@ -226,17 +226,17 @@ State stateManager(State beforeState, int currentWealth, int currentStrength, in
 			}
 			break;
 		case Fleeing:
-			if (distanceCop < 7 && distanceCop > 0) {
+			if (currentDistanceCop < 7 && currentDistanceCop > 0) {
 				//GetTired
 				outputState = LayingLow;
 				actionPerformingText = "\"I\'m getting very tired, so I better lay low for a while\"";
 			}
-			else if (distanceCop >= 7) {
+			else if (currentDistanceCop >= 7) {
 				//FeelSafe
 				outputState = RobbingBank;
 				actionPerformingText = "\"Let\'s get back to what I was doing\"";
 			}
-			else if (distanceCop == 0 && strength < 50) {
+			else if (currentDistanceCop == 0 && currentStrength < 50) {
 				//GetCaught
 				outputState = BeingInJail;
 				actionPerformingText = "\"Oh no, the cops are bringing me to my new home!\"";
@@ -247,7 +247,7 @@ State stateManager(State beforeState, int currentWealth, int currentStrength, in
 			}
 			break;
 		case BeingInJail:
-			if (strength >= 70) {
+			if (currentStrength >= 70) {
 				//Escape
 				outputState = Fleeing;
 				actionPerformingText = "\"RUUUNNN!! RUUUUUUUUNNNN!!!\"";
@@ -258,12 +258,12 @@ State stateManager(State beforeState, int currentWealth, int currentStrength, in
 			}
 			break;
 		case BeingTipsy:
-			if (strength < 40) {
+			if (currentStrength < 40) {
 				//Tell too much
 				outputState = BeingInJail;
 				actionPerformingText = "\"No! Wait! Those were just stories!\"";
 			}
-			else if (strength >= 40 && wealth < 40) {
+			else if (currentStrength >= 40 && currentWealth < 40) {
 				//Get bored
 				outputState = RobbingBank;
 				actionPerformingText = "\"You know what would be funny..? If we go \'borrow\' something from the bank…hehe\"";
